@@ -1,6 +1,6 @@
 export const experiences = [
   {
-    role: 'Assistant Developer Developer',
+    role: 'Assistant Developer',
     company: 'Protolabz eServices',
     location: 'Phagwara, Punjab',
     duration: 'Apr 2024 — May 2026',

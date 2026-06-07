@@ -60,6 +60,7 @@ export default function CapabilitiesSection() {
 
           {/* BUTTON */}
           <div className="pt-16">
+            <a href="/work"/>
             <button className="flex items-center gap-5 group">
               <span className="text-black text-lg font-light">
                 Learn more about me
@@ -70,7 +71,6 @@ export default function CapabilitiesSection() {
             </button>
           </div>
         </div>
-
       </div>
     </section>
   )
