@@ -14,8 +14,15 @@ import 'swiper/css/pagination'
 
 gsap.registerPlugin(ScrollTrigger)
 
+type Project = {
+  title: string
+  description: string
+  image: string
+  link: string
+  badge: string | null
+}
 
-const projects = [
+const projects: Project[] = [
   {
     title: 'The Revue Company',
     description:
@@ -43,14 +50,16 @@ const projects = [
 ]
 
 export default function WorkSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const sliderRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLDivElement | null>(null)
+  const sliderRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     if (window.innerWidth < 1024) return
 
     const section = sectionRef.current
     const slider = sliderRef.current
+
     if (!section || !slider) return
 
     const totalWidth = slider.scrollWidth
@@ -78,20 +87,22 @@ export default function WorkSection() {
       ref={sectionRef}
       className="relative bg-white overflow-hidden"
     >
-
-      {/* ================= DESKTOP ================= */}
+      {/* Desktop */}
       <div
         ref={sliderRef}
         className="hidden lg:flex gap-6 px-16 py-24 items-center"
       >
-        {projects.map((project, index) => (
-          <Banner key={index} project={project} />
+        {projects.map((project) => (
+          <Banner
+            key={project.title}
+            project={project}
+          />
         ))}
 
         <CTACard />
       </div>
 
-      {/* ================= MOBILE CAROUSEL ================= */}
+      {/* Mobile */}
       <div className="lg:hidden px-4 py-16">
         <Swiper
           modules={[Pagination]}
@@ -102,9 +113,12 @@ export default function WorkSection() {
           pagination={{ clickable: true }}
           className="pb-12"
         >
-          {projects.map((project, index) => (
-            <SwiperSlide key={index}>
-              <Banner project={project} mobile />
+          {projects.map((project) => (
+            <SwiperSlide key={project.title}>
+              <Banner
+                project={project}
+                mobile
+              />
             </SwiperSlide>
           ))}
 
@@ -117,21 +131,29 @@ export default function WorkSection() {
   )
 }
 
-/* ================= BANNER ================= */
+interface BannerProps {
+  project: Project
+  mobile?: boolean
+}
 
-function Banner({ project, mobile = false }: any) {
+function Banner({
+  project,
+  mobile = false,
+}: BannerProps) {
   return (
     <Link
       href={project.link}
-      className={`group relative rounded-3xl overflow-hidden block
-        ${mobile
+      className={`group relative rounded-3xl overflow-hidden block ${
+        mobile
           ? 'w-full h-[65vh]'
-          : 'w-[70vw] h-[80vh] flex-shrink-0'}`}
+          : 'w-[70vw] h-[80vh] flex-shrink-0'
+      }`}
     >
       <Image
         src={project.image}
         alt={project.title}
         fill
+        sizes="(max-width: 1024px) 100vw, 70vw"
         className="object-cover transition-transform duration-700 group-hover:scale-105"
       />
 
@@ -147,6 +169,7 @@ function Banner({ project, mobile = false }: any) {
         <h3 className="text-2xl font-semibold mb-2">
           {project.title}
         </h3>
+
         <p className="text-sm opacity-70 leading-relaxed">
           {project.description}
         </p>
@@ -155,16 +178,21 @@ function Banner({ project, mobile = false }: any) {
   )
 }
 
-/* ================= CTA CARD ================= */
+interface CTACardProps {
+  mobile?: boolean
+}
 
-function CTACard({ mobile = false }: any) {
+function CTACard({
+  mobile = false,
+}: CTACardProps) {
   return (
     <a
       href="/work"
-      className={`group relative bg-black rounded-3xl flex flex-col justify-end p-8
-        ${mobile
+      className={`group relative bg-black rounded-3xl flex flex-col justify-end p-8 ${
+        mobile
           ? 'w-full h-[65vh]'
-          : 'w-[30vw] h-[80vh] flex-shrink-0'}`}
+          : 'w-[30vw] h-[80vh] flex-shrink-0'
+      }`}
     >
       <div>
         <h2 className="text-4xl text-white mb-8 leading-tight">
@@ -175,6 +203,7 @@ function CTACard({ mobile = false }: any) {
           <span className="text-white/60 text-lg">
             View my work
           </span>
+
           <div className="w-11 h-11 rounded-full border border-white/40 flex items-center justify-center text-white transition-all duration-300 group-hover:bg-white group-hover:text-black">
             →
           </div>
