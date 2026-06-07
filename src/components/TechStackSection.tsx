@@ -93,7 +93,9 @@ export default function TechStackSection() {
           {Object.entries(techStack).map(([category, items], index) => (
             <div
               key={category}
-              ref={(el) => (categoryRefs.current[index] = el)}
+              ref={(el) => {
+                categoryRefs.current[index] = el
+              }}
             >
               <h3 className="text-2xl font-medium text-black mb-10">
                 {category}
